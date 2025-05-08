@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Phone Purchase</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 20px auto;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h2>Mobile Phone Purchase System</h2>
+    <button onclick="purchasePhone()">Purchase a Phone</button>
+    <div id="output"></div>
+
+    <script>
+        function purchasePhone() {
+            let output = document.getElementById("output");
+            output.innerHTML = "";
+
+            // Phone options with details
+            const phones = {
+                "1": { name: "iPhone 15 Pro", price: 999, brand: "Apple", storage: "128GB", color: "Space Black" },
+                "2": { name: "iPhone 15", price: 799, brand: "Apple", storage: "128GB", color: "Blue" },
+                "3": { name: "Samsung Galaxy S23 Ultra", price: 1199, brand: "Samsung", storage: "256GB", color: "Phantom Black" },
+                "4": { name: "Samsung Galaxy Z Fold5", price: 1799, brand: "Samsung", storage: "512GB", color: "Icy Blue" },
+                "5": { name: "Google Pixel 8 Pro", price: 999, brand: "Google", storage: "128GB", color: "Obsidian" },
+                "6": { name: "OnePlus 11", price: 699, brand: "OnePlus", storage: "256GB", color: "Titan Black" },
+                "7": { name: "Xiaomi 13 Pro", price: 899, brand: "Xiaomi", storage: "256GB", color: "Ceramic White" },
+                "8": { name: "Nothing Phone 2", price: 599, brand: "Nothing", storage: "128GB", color: "White" },
+                "9": { name: "ASUS ROG Phone 7", price: 999, brand: "ASUS", storage: "256GB", color: "Storm White" },
+                "10": { name: "Sony Xperia 1 V", price: 1399, brand: "Sony", storage: "256GB", color: "Black" },
+                "11": { name: "Motorola Edge 40 Pro", price: 799, brand: "Motorola", storage: "512GB", color: "Black" },
+                "12": { name: "Huawei P60 Pro", price: 1099, brand: "Huawei", storage: "256GB", color: "Rococo Pearl" }
+            };
+
+            let phoneChoice;
+            
+            // Display phone options
+            let phoneList = "Select a phone:\n";
+            for (const [key, phone] of Object.entries(phones)) {
+                phoneList += `${key}. ${phone.brand} ${phone.name} (${phone.storage}, ${phone.color}) - $${phone.price}\n`;
+            }
+
+            // Validate phone selection
+            while (true) {
+                phoneChoice = prompt(phoneList);
+                if (phones[phoneChoice]) {
+                    break;
+                } else if (phoneChoice === null) {
+                    return; // User cancelled
+                } else {
+                    alert("Invalid selection. Please choose a number between 1-12.");
+                }
+            }
+
+            const selectedPhone = phones[phoneChoice];
+
+            // Validate quantity
+            let quantity;
+            do {
+                quantity = prompt(`How many ${selectedPhone.name} units do you want to purchase?`);
+                if (quantity === null) return; // User cancelled
+            } while (isNaN(quantity) || quantity <= 0 || quantity === "");
+
+            quantity = Number(quantity);
+            let totalCost = selectedPhone.price * quantity;
+
+            // Apply discounts
+            if (quantity >= 5) {
+                totalCost *= 0.85; // 15% discount for 5+ units
+            } else if (quantity >= 3) {
+                totalCost *= 0.9; // 10% discount for 3-4 units
+            }
+
+            // Warranty option
+            let warrantyCost = 0;
+            const addWarranty = confirm("Would you like to add a 2-year extended warranty for $99 per device?");
+            if (addWarranty) {
+                warrantyCost = 99 * quantity;
+                totalCost += warrantyCost;
+            }
+
+            // Payment method
+            const paymentMethods = {
+                "1": "Credit Card",
+                "2": "Debit Card",
+                "3": "PayPal",
+                "4": "Bank Transfer"
+            };
+
+            let paymentMethod;
+            while (true) {
+                paymentMethod = prompt("Select payment method:\n1. Credit Card\n2. Debit Card\n3. PayPal\n4. Bank Transfer");
+                if (paymentMethods[paymentMethod]) {
+                    break;
+                } else if (paymentMethod === null) {
+                    return; // User cancelled
+                } else {
+                    alert("Invalid payment method. Please choose 1-4.");
+                }
+            }
+
+            // Display purchase summary
+            output.innerHTML = `
+                <h3>Purchase Confirmed!</h3>
+                <p><strong>Phone:</strong> ${selectedPhone.brand} ${selectedPhone.name}</p>
+                <p><strong>Storage:</strong> ${selectedPhone.storage}</p>
+                <p><strong>Color:</strong> ${selectedPhone.color}</p>
+                <p><strong>Quantity:</strong> ${quantity}</p>
+                ${addWarranty ? `<p><strong>Warranty:</strong> 2-year extended warranty ($${99 * quantity})</p>` : ''}
+                <p><strong>Unit Price:</strong> $${selectedPhone.price.toFixed(2)}</p>
+                <p><strong>Payment Method:</strong> ${paymentMethods[paymentMethod]}</p>
+                <p><strong>Total Cost:</strong> $${totalCost.toFixed(2)}</p>
+                <p>Thank you for your purchase! Your order will be shipped within 2 business days.</p>
+            `;
+        }
+    </script>
+</body>
+</html>
