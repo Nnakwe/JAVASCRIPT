@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Goods Booking System</title>
+</head>
+<body>
+    <h2>Goods Booking System</h2>
+    <button onclick="GoodsReceipt()">Book your goods</button>
+    <p id="output"></p>
+
+    <script>
+        function GoodsReceipt() {
+
+        let output=document.getElementbyId("output");
+            // variables:Screens Choice and Screen Prices
+
+        let screens = {
+                "1": { name: "Infinix (X650)", price: 120 },
+                "2": { name: "Samsung (A20S)", price: 110 },
+                "3": { name: "Samsung (J4plus)", price: 150 },
+                "4": { name:  "Infinix(X655)",price:120}
+                "5": { name: "Infinix (X657)", price: 120 },
+                "6": { name: "Samsung (A12)", price: 110 },
+                "7": { name: "Samsung (J6plus)", price: 150 },
+                "8": { name:  "Infinix(X659)",price:120}
+                "9": { name: "Infinix (X6511)", price: 120 },
+                "10": { name: "Samsung (A10s)", price: 110 },
+                "11": { name: "Samsung (A80)", price: 150 },
+                "12": { name:  "Infinix(X6512)",price:120}
+            };
+             let screensChoice;
+            let screen;
+
+         // while loop to ensure valid goods selection
+            while (true) {
+            screensChoice = prompt("Select many screens:\n1.Infinix (X650)\n2.Samsung (A10)\n3.Samsung (J4plus)\n4.Infinix(X655)\n5.Infinix (X657)\n6.Samsung (A12)\n7.Samsung (J6plus)\n8.Infinix(X659)\n9.Infinix (X6511)\n10.Samsung (A10s)\n11.Samsung (A80)\n12.Infinix(X6512).");
+
+                if (screens[screensChoice]) {
+                    break; // Exit loop if a valid choice is made
+                } else {
+                    alert("Invalid selection. Please choose 1, 2,3 4 5 6 7 8 9 10 11 or 12.");
+                }
+            }
+
+        // do-while loop to ensure a valid quantity input
+            do {
+                quantity = prompt("Enter your quantity:");
+            } while (isNaN(quantity) || quantity <= 0);
+            
+            quantity = Number(quantity); // Convert quantity to a number
+    
+     // If-Else to check age eligibility
+            if ((screensSelect === "1" && quantity < 6) || (screensSelect === "3" && quantity < 12)) {
+                alert("You are not allowed to order this goods due to quantity restrictions.");
+                return;
+            }
+
+            // do-while loop to ensure valid ticket quantity
+            let tickets;
+            do {
+                screens = prompt("How many screens do you want?");
+            } while (isNaN(screens) || screens <= 0);
+            
+            screens = Number(screens);
+
+            let screenName = screens[screenChoice].name;
+            let pricePerScreen = screens[screenChoice].price;
+            let totalCost = pricePerScreen * screens;
+
+             // Apply Discount using if-else
+            if (screens >= 7) {
+                totalCost *= 0.9; // 10% discount for 7+ screens
+            } else if (screens >= 4) {
+                totalCost *= 0.95; // 5% discount for 4-6 tickets
+            }
+
+              // Display screen numbers using for loop
+            let screenNumbers = "";
+            for (let i = 1; i <= screens; i++) {
+                screenNumbers += "Screens " + i + " ";
+            }
+
+            // Output result
+            output.innerHTML = `
+                <strong>Booking Confirmed! </strong><br>
+                Screens: ${screenName} <br>
+                Screens: ${Screens}<br>
+                Total Cost: $${totalCost.toFixed(2)}<br>
+                Screens: ${screenNumbers}
+            `;
+
+                  }
+    </script>
+
+</body>
+</html>
