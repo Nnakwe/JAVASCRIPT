@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Movie Ticket Booking</title>
+</head>
+<body>
+    <h2>Movie Ticket Booking System</h2>
+    <button onclick="bookTicket()">Book a Ticket</button>
+    <p id="output"></p>
+
+    <script>
+        function bookTicket() {
+            let output = document.getElementById("output");
+
+            // Variables: Movie choices and ticket price
+            let movies = {
+                "1": { name: "Spider-Man (PG-13)", price: 12 },
+                "2": { name: "Frozen 2 (G)", price: 10 },
+                "3": { name: "The Conjuring (R)", price: 15 },
+                "4": { name:  "Muphasa (PG-16)",price:20}
+            };
+
+            let movieChoice;
+            let age;
+            
+            // while loop to ensure valid movie selection
+            while (true) {
+                movieChoice = prompt("Select a movie:\n1. Spider-Man (PG-13)\n2. Frozen 2 (G)\n3. The Conjuring (R) \n4.Muphasa (PG-16).");
+                
+                if (movies[movieChoice]) {
+                    break; // Exit loop if a valid choice is made
+                } else {
+                    alert("Invalid selection. Please choose 1, 2,3 or 4.");
+                }
+            }
+
+            // do-while loop to ensure a valid age input
+            do {
+                age = prompt("Enter your age:");
+            } while (isNaN(age) || age <= 0);
+            
+            age = Number(age); // Convert age to a number
+
+            // If-Else to check age eligibility
+            if ((movieChoice === "1" && age < 13) || (movieChoice === "3" && age < 18)) {
+                alert("You are not allowed to watch this movie due to age restrictions.");
+                return;
+            }
+
+            // do-while loop to ensure valid ticket quantity
+            let tickets;
+            do {
+                tickets = prompt("How many tickets do you want?");
+            } while (isNaN(tickets) || tickets <= 0);
+            
+            tickets = Number(tickets);
+
+            let movieName = movies[movieChoice].name;
+            let pricePerTicket = movies[movieChoice].price;
+            let totalCost = pricePerTicket * tickets;
+
+            // Apply Discount using if-else
+            if (tickets >= 5) {
+                totalCost *= 0.9; // 10% discount for 5+ tickets
+            } else if (tickets >= 3) {
+                totalCost *= 0.95; // 5% discount for 3-4 tickets
+            }
+
+            // Switch case for movie selection
+            let category;
+            switch (movieChoice) {
+                case "1":
+                    category = "Action";
+                    break;
+                case "2":
+                    category = "Animation";
+                    break;
+                case "3":
+                    category = "Horror";
+                    break;
+                case "4":
+                    category = "Wild";
+                    break;
+                default:
+                    category = "Unknown";
+            }
+
+            // Display seat numbers using for loop
+            let seatNumbers = "";
+            for (let i = 1; i <= tickets; i++) {
+                seatNumbers += "Seat " + i + " ";
+            }
+
+            // Output result
+            output.innerHTML = `
+                <strong>Booking Confirmed! </strong><br>
+                Movie: ${movieName} (${category})<br>
+                Tickets: ${tickets}<br>
+                Total Cost: $${totalCost.toFixed(2)}<br>
+                Seats: ${seatNumbers}
+            `;
+        }
+    </script>
+
+</body>
+</html>
