@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login Attempt</title>
+</head>
+<body>
+    <h2>Login System</h2>
+    <p>Open the browser console (F12) to see login attempts.</p>
+
+    <script>
+        let correctPassword = "secure123";
+        let attempts = 0;
+        let maxAttempts = 3;
+        let userInput = "";
+
+        while (userInput !== correctPassword && attempts < maxAttempts) {
+            userInput = prompt("Enter your password:");
+            attempts++;
+            if (userInput === correctPassword) {
+                alert("Login Successful!");
+            } else if (attempts < maxAttempts) {
+                alert("Incorrect password. Try again.");
+            } else {
+                alert("Too many failed attempts. Account locked.");
+            }
+        }
+    </script>
+</body>
+</html>
