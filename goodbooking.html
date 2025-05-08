@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Goods Booking System</title>
+</head>
+<body>
+    <h2>Goods Booking System</h2>
+    <button onclick="bookGoods()">Book your goods</button>
+    <p id="output"></p>
+
+    <script>
+        function bookGoods() {
+            let output = document.getElementById("output");
+            output.innerHTML = "";
+
+            // Screens options with details
+            let screens = {
+                "1": { name: "Infinix (X650)", price: 120 },
+                "2": { name: "Samsung (A10)", price: 110 },
+                "3": { name: "Samsung (J4plus)", price: 150 },
+                "4": { name: "Infinix(X655)", price: 120 },
+                "5": { name: "Infinix (X657)", price: 120 },
+                "6": { name: "Samsung (A12)", price: 110 },
+                "7": { name: "Samsung (J6plus)", price: 150 },
+                "8": { name: "Infinix(X659)", price: 120 },
+                "9": { name: "Infinix (X6511)", price: 120 },
+                "10": { name: "Samsung (A10s)", price: 110 },
+                "11": { name: "Samsung (A80)", price: 150 },
+                "12": { name: "Infinix(X6512)", price: 120 }
+            };
+
+            let screenChoice;
+            let quantity;
+
+            // Display screen options
+            let screenList = "Select a screen:\n";
+            for (const [key, screen] of Object.entries(screens)) {
+                screenList += `${key}. ${screen.name} - $${screen.price}\n`;
+            }
+
+            // Validate screen selection
+            while (true) {
+                screenChoice = prompt(screenList);
+                if (screens[screenChoice]) {
+                    break;
+                } else if (screenChoice === null) {
+                    return; // User cancelled
+                } else {
+                    alert("Invalid selection. Please choose a number between 1-12.");
+                }
+            }
+
+            const selectedScreen = screens[screenChoice];
+
+            // Validate quantity
+            do {
+                quantity = prompt(`How many ${selectedScreen.name} units do you want?`);
+                if (quantity === null) return; // User cancelled
+            } while (isNaN(quantity) || quantity <= 0 || quantity === "");
+
+            quantity = Number(quantity);
+            
+            // Quantity restrictions
+            if ((screenChoice === "1" && quantity < 6) || (screenChoice === "3" && quantity < 12)) {
+                alert("Minimum quantity not met for this product.");
+                return;
+            }
+
+            let totalCost = selectedScreen.price * quantity;
+
+            // Apply discounts
+            if (quantity >= 7) {
+                totalCost *= 0.9; // 10% discount for 7+ units
+            } else if (quantity >= 4) {
+                totalCost *= 0.95; // 5% discount for 4-6 units
+            }
+
+            // Display order summary
+            let orderNumbers = "";
+            for (let i = 1; i <= quantity; i++) {
+                orderNumbers += `Order #${i}`;
+                if (i < quantity) orderNumbers += ", ";
+            }
+
+            output.innerHTML = `
+                <strong>Order Confirmed!</strong><br>
+                Product: ${selectedScreen.name}<br>
+                Quantity: ${quantity}<br>
+                Unit Price: $${selectedScreen.price.toFixed(2)}<br>
+                Total Cost: $${totalCost.toFixed(2)}<br>
+                Orders: ${orderNumbers}
+            `;
+        }
+    </script>
+</body>
+</html>
