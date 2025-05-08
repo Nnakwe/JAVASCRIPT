@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temperature Checker</title>
+</head>
+<body>
+  <h1>Temperature Checker</h1>
+  <input type="number" id="tempInput" placeholder="Enter temperature">
+  <button onclick="checkTemperature()">Check</button>
+  <p id="hotresult"></p>
+  <p id="result"></p>
+  <p id="coldresult"></p>
+
+  <script>
+    function checkTemperature() {
+      // Get the input value
+      const temperature = parseFloat(document.getElementById('tempInput').value);
+
+      // Check the temperature range
+      if (temperature > 30) {
+        document.getElementById('hotresult').textContent = "It's hot outside!";
+      } else if (temperature >= 20 && temperature <= 30) {
+        document.getElementById('result').textContent = "The weather is pleasant.";
+      } else {
+
+
+
+        
+        document.getElementById('coldresult').textContent = "It's cold outside!";
+      }
+    }
+  </script>
+
+  <style>
+    #hotresult{
+      color: red;
+      font-size: x-large;
+    }
+
+    #coldresult{
+      color: blue;
+      font-size: x-large;
+    }
+  </style>
+</body>
+</html>
