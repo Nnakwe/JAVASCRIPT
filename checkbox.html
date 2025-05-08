@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Ticket Booking System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .movie-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #d70000;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        select, input, .movie-checkboxes {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .movie-checkboxes {
+            height: auto;
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .movie-option {
+            margin-bottom: 8px;
+        }
+        button {
+            background-color: #d70000;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #b50000;
+        }
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            display: none;
+            border-left: 5px solid #d70000;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .ticket-summary {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        .movie-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="movie-container">
+        <h1>Movie Ticket Booking</h1>
+        
+        <form id="movieForm">
+            <div class="form-group">
+                <label>Select Movies:</label>
+                <div class="movie-checkboxes">
+                    <div class="movie-option">
+                        <input type="checkbox" id="movie1" name="movies" value="Spider-Man: No Way Home">
+                        <label for="movie1">Spider-Man (PG-13) - GHS 25</label>
+                    </div>
+                    <div class="movie-option">
+                        <input type="checkbox" id="movie2" name="movies" value="Frozen II">
+                        <label for="movie2">Frozen (G) - GHS 20</label>
+                    </div>
+                    <div class="movie-option">
+                        <input type="checkbox" id="movie3" name="movies" value="The Conjuring">
+                        <label for="movie3">The Conjuring (R) - GHS 30</label>
+                    </div>
+                    <div class="movie-option">
+                        <input type="checkbox" id="movie4" name="movies" value="The Lion King">
+                        <label for="movie4">Mufasa (PG) - GHS 22</label>
+                    </div>
+                    <div class="movie-option">
+                        <input type="checkbox" id="movie5" name="movies" value="X-Men: Dark Phoenix">
+                        <label for="movie5">X-Men: (PG-16) - GHS 28</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="seat">Number of Tickets:</label>
+                <input type="number" id="seat" min="1" max="10" value="1">
+            </div>
+            
+            <div class="form-group">
+                <label for="paymentType">Payment Method:</label>
+                <select id="paymentType" required>
+                    <option value="">-- Select payment method --</option>
+                    <option value="creditcard">Credit Card</option>
+                    <option value="mastercard">Master Card</option>
+                    <option value="visacard">Visa Card</option>
+                    <option value="mobilemoney">Mobile Money</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="cardDetails">
+                <label for="cardNumber">Card Number:</label>
+                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456">
+                
+            </div>
+
+            <div class="form-group" id="mobileMoneyDetails" style="display: none;">
+                <label for="mobileNumber">Mobile Number:</label>
+                <input type="tel" id="mobileNumber" placeholder="0241234567">
+            </div>
+            
+            <button type="button" onclick="processBooking()">Book Tickets</button>
+        </form>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Show/hide payment details based on payment method
+        document.getElementById('paymentType').addEventListener('change', function() {
+            const paymentType = this.value;
+            const cardDetails = document.getElementById('cardDetails');
+            const mobileMoneyDetails = document.getElementById('mobileMoneyDetails');
+            
+            if (paymentType === 'mobilemoney') {
+                cardDetails.style.display = 'none';
+                mobileMoneyDetails.style.display = 'block';
+            } else if (paymentType === 'creditcard' || paymentType === 'mastercard' || paymentType === 'visacard') {
+                cardDetails.style.display = 'block';
+                mobileMoneyDetails.style.display = 'none';
+            } else {
+                cardDetails.style.display = 'none';
+                mobileMoneyDetails.style.display = 'none';
+            }
+        });
+
+        // Movie prices
+        const moviePrices = {
+            "Spider-Man": 25,
+            "Frozen": 20,
+            "The Conjuring": 30,
+            "Mufasa": 22,
+            "X-Men": 28
+        };
+
+        function processBooking() {
+            const selectedMovies = Array.from(document.querySelectorAll('input[name="movies"]:checked'))
+                                      .map(movie => movie.value);
+            const seatCount = parseInt(document.getElementById('seat').value);
+            const paymentType = document.getElementById('paymentType').value;
+            const resultDiv = document.getElementById('result');
+            
+            // Reset result div
+            resultDiv.style.display =
