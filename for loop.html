@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Student Grades</title>
+</head>
+<body>
+    <h2>Student Grades</h2>
+    <ul id="gradeList"></ul>
+
+    <script>
+        let students = [
+            { name: "Alice", grade: 85 },
+            { name: "Bob", grade: 92 },
+            { name: "Charlie", grade: 78 },
+            { name: "David", grade: 88 }
+        ];
+
+        let list = document.getElementById("gradeList");
+
+        students.forEach(student => {
+            let li = document.createElement("li");
+            li.textContent = student.name + " - Grade: " + student.grade;
+            list.appendChild(li);
+        });
+    </script>
+</body>
+</html> 
